@@ -92,140 +92,186 @@ Shape <- Shape()
 Range <- Range()
 
 
-sjdt_Algorithm <- function(tableaux,range){
+sjdt_Algorithm <- function(tableaux,range,setorder){
   
-  unsplit <- tableaux
-  print(unsplit)
-  uni_unsplit <-abs(unsplit)
   
-  I <-list()
-  J <-list()
-  A <-list()
-  B <-list()
-  C <-list()
-  D <-list()
-  
-
-  
-  for(l in 1:ncol(unsplit)){
+  repeat{
     
-
-    #full-slot
-    I[[l]] <- matrix(,nrow=1,ncol=1)
-    #empty-slot
-    J[[l]] <- matrix(,nrow=1,ncol=1)
-    
-
-    for(m in 1:range){
-      
-      if(sum(uni_unsplit[,l]==m)==2){
-        I[[l]][1,] <- m
-
-
-      }
-      else if(sum(uni_unsplit[,l]==m)==0){
-        J[[l]][1,] <- m
-
-      }
+    if(setorder==0){
+      break
     }
     
-  }
-  
-
-  A[[l]] <- matrix(,nrow=1,ncol=ncol(unsplit))
-
-  B[[l]] <- matrix(,nrow=1,ncol=ncol(unsplit))
-
-  C[[l]] <- matrix(,nrow=1,ncol=ncol(unsplit))
-
-  D[[l]] <- matrix(,nrow=1,ncol=ncol(unsplit))
-  
-  
-  for(n in 1:ncol(unsplit)){
+    unsplit <- tableaux
+    print(unsplit)
+    uni_unsplit <-abs(unsplit)
+    
+    I <-list()
+    J <-list()
+    A <-list()
+    B <-list()
+    C <-list()
+    D <-list()
     
     
-    #Extract A and D
-    A[[n]] <- subset(unsplit[,n],unsplit[,n]<0)
-    D[[n]] <- subset(unsplit[,n],unsplit[,n]>0)
     
-    #Extract B and C
-    B[[n]] <- subset(unsplit[,n],unsplit[,n]<0)
-    C[[n]] <- subset(unsplit[,n],unsplit[,n]>0)
-    
-    for(o in 1:ncol(I[[n]])){
+    for(l in 1:ncol(unsplit)){
       
-      if(-I[[n]][,o] %in% B[[n]]){
+      
+      #full-slot
+      I[[l]] <- matrix(,nrow=1,ncol=1)
+      #empty-slot
+      J[[l]] <- matrix(,nrow=1,ncol=1)
+      
+      
+      for(m in 1:range){
         
-        for(q in 1:ncol(J[[n]])){
+        if(sum(uni_unsplit[,l]==m)==2){
+          I[[l]][1,] <- m
           
-          if(I[[n]][,o]>J[[n]][,q]){
-
-            B[[n]][B[[n]] == -I[[n]][,o]] <- -J[[q]]
-
-            C[[n]][C[[n]] == I[[n]][,o]] <- J[[q]]
-
+          
+        }
+        else if(sum(uni_unsplit[,l]==m)==0){
+          J[[l]][1,] <- m
+          
+        }
+      }
+      
+    }
+    
+    
+    A[[l]] <- matrix(,nrow=1,ncol=ncol(unsplit))
+    
+    B[[l]] <- matrix(,nrow=1,ncol=ncol(unsplit))
+    
+    C[[l]] <- matrix(,nrow=1,ncol=ncol(unsplit))
+    
+    D[[l]] <- matrix(,nrow=1,ncol=ncol(unsplit))
+    
+    
+    for(n in 1:ncol(unsplit)){
+      
+      
+      #Extract A and D
+      A[[n]] <- subset(unsplit[,n],unsplit[,n]<0)
+      D[[n]] <- subset(unsplit[,n],unsplit[,n]>0)
+      
+      #Extract B and C
+      B[[n]] <- subset(unsplit[,n],unsplit[,n]<0)
+      C[[n]] <- subset(unsplit[,n],unsplit[,n]>0)
+      
+      for(o in 1:ncol(I[[n]])){
+        
+        if(-I[[n]][,o] %in% B[[n]]){
+          
+          for(q in 1:ncol(J[[n]])){
             
+            if(I[[n]][,o]>J[[n]][,q]){
+              
+              B[[n]][B[[n]] == -I[[n]][,o]] <- -J[[q]]
+              
+              C[[n]][C[[n]] == I[[n]][,o]] <- J[[q]]
+              
+              
+            }
           }
         }
       }
-    }
-    sort(B[[n]],decreasing = FALSE)
-    sort(C[[n]],decreasing = FALSE)
-  }
-  
-  split <- matrix(,nrow=nrow(unsplit),ncol=2*ncol(unsplit))
-  
-  for(u in 1:ncol(unsplit)){
-    
-    combined_left <- append(A[[u]],D[[u]])
-    combined_right <- append(B[[u]],C[[u]])
-    while(length(combined_left)!=nrow(unsplit)){
-      combined_left <- append(combined_left,0)
-    }
-    while(length(combined_right)!=nrow(unsplit)){
-      combined_right <- append(combined_right,0)
+      sort(B[[n]],decreasing = FALSE)
+      sort(C[[n]],decreasing = FALSE)
     }
     
-    split[,2*u-1] <- combined_left
-    split[,2*u] <- combined_right
-  }
-  
-  #Movement section
-  split[split == -3] <- 0
-  index <- which(split==0,arr.ind=TRUE)
-  index <- index[order(index[,1],decreasing=TRUE),]
-  
-  index_cord <- nrow(index)
-  print(index)
-  
-  change_cord <- matrix(,nrow=1,ncol=1)
-  while(index_cord==0){
+    split <- matrix(,nrow=nrow(unsplit),ncol=2*ncol(unsplit))
     
-    
-    #vertical move
-    if(split[index[2*k,1],index[2*k,2]]<=split[index[2*k+1,1],index[2*k+1,2]]){
+    for(u in 1:ncol(unsplit)){
       
-      split[index[2*k,1],index[2*k,2]] <- split[index[2*k,1],index[2*k,2]]
-      
-    }
-    else{
-      
-      if(split[index[2*k,1],index[2*k,2]]>0){
-        
+      combined_left <- append(A[[u]],D[[u]])
+      combined_right <- append(B[[u]],C[[u]])
+      while(length(combined_left)!=nrow(unsplit)){
+        combined_left <- append(combined_left,0)
       }
-      else{
-        
+      while(length(combined_right)!=nrow(unsplit)){
+        combined_right <- append(combined_right,0)
       }
       
+      split[,2*u-1] <- combined_left
+      split[,2*u] <- combined_right
     }
-    #horizontal move
-    k = k-1
-  }
+    
+    #Movement section
+    split[split == -setorder] <- 0
+    index <- which(split==0,arr.ind=TRUE)
+    index <- which(index[,1]==1,arr.ind=TRUE)
+    
+    print(index)
+    # if the elements in the list that has to be eliminated are exist
+    if(length(index)!=0){
+      
+      index <- index[order(index[,2],decreasing=TRUE),]
+      index_cord <- nrow(index)
+      change_cord <- matrix(,nrow=1,ncol=1)
+      
+      
+      #movement algorithm
+      repeat{
+        #vertical move
+        if(split[change_cord[1,1]+1,2*change_cord[1,2]]<split[change_cord[1,1],2*change_cord[1,2]+1]){
+          
+          #A/D column move
+          split[change_cord[1,1],2*change_cord[1,2]-1] <- split[change_cord[1,1]+1,2*change_cord[1,2]-1]
+          split[change_cord[1,1]+1,2*change_cord[1,2]-1] <- 0
+          #B/C column move
+          split[change_cord[1,1],2*change_cord[1,2]] <- split[change_cord[1,1]+1,2*change_cord[1,2]]
+          split[change_cord[1,1]+1,2*change_cord[1,2]] <- 0
+          
+          # vertical coordinate +1
+          change_cord[1,1] < - change_cord[1,1]+1
+          
+        }
+        #horizontal move
+        else {
+          
+          # Case : bar_n
+          if(split[change_cord[1,1],2*change_cord[1,2]+1]<0){
+            
+            #T_n Col B/C insert
+            split[change_cord[1,1],2*change_cord[1,2]] <- split[change_cord[1,1],2*change_cord[1,2]+1]
+            #T_n+1 Col A/D insert
+            split[change_cord[1,1],2*change_cord[1,2]+1] <- 0
+            
+            B[[change_cord[1,2]]] <- split[change_cord[1,1],2*change_cord[1,2]+1]
+            append[B[[change_cord[1,2]]],B[[change_cord[1,2]]]]
+            for(k in 1:setorder){
+              
+              ##여기서부터 시작 재조합.
+            }
+            
 
+          }
+          
+          # Case : n
+          else if(split[change_cord[1,1],2*change_cord[1,2]+1]>0){
+            
+          }
+        }
+        #exit with vertical or horizontal move
+        if(change_cord[1,1]=="a"||change_cord[1,2]=="b"){
+          break
+        }
+      }
+      
+      
+      
+    }
+    
+    sjdt_Algorithm(Shape,Range,setorder-1)
+    
+    
+    
+    print(split)
+    return(split)
+  }
   
-  print(split)
-  return(split)
 }
 
-a <- sjdt_Algorithm(Shape,Range)
+a <- sjdt_Algorithm(Shape,Range,4)
 
