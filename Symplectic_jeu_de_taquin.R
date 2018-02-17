@@ -104,6 +104,22 @@ sjdt_Algorithm <- function(tableaux,range,setorder){
     unsplit <- tableaux
     print(unsplit)
     uni_unsplit <-abs(unsplit)
+    #De-concini's part
+    sub_tableaux <-matrix(,nrow=1,ncol=1)
+    sub_tableaux <- subset(unsplit, uni_unsplit>0&&uni_unsplit<setorder+1)
+    length_rows <- matrix(,nrow=1,ncol=ncol(sub_tableaux))
+    
+    # rows of sub_tab
+    for(i in 1:ncol(sub_tableaux)){
+      
+      length_rows[,i] <- length(sub_tableaux[,i])
+      
+    }
+    
+    # cols of sub_tab
+    length_cols <- matrix(,nrow=1,ncol=1)
+    length_cols <- ncol(unsplit)
+
     
     I <-list()
     J <-list()
@@ -167,9 +183,9 @@ sjdt_Algorithm <- function(tableaux,range,setorder){
             
             if(I[[n]][,o]>J[[n]][,q]){
               
-              B[[n]][B[[n]] == -I[[n]][,o]] <- -J[[q]]
+              B[[n]][B[[n]] == -I[[n]][,o]] <- -J[[n]][,q]
               
-              C[[n]][C[[n]] == I[[n]][,o]] <- J[[q]]
+              C[[n]][C[[n]] == I[[n]][,o]] <- J[[n]][,q]
               
               
             }
@@ -184,8 +200,8 @@ sjdt_Algorithm <- function(tableaux,range,setorder){
     
     for(u in 1:ncol(unsplit)){
       
-      combined_left <- append(A[[u]],D[[u]])
-      combined_right <- append(B[[u]],C[[u]])
+      combined_left <- append(A[[u]],C[[u]])
+      combined_right <- append(B[[u]],D[[u]])
       while(length(combined_left)!=nrow(unsplit)){
         combined_left <- append(combined_left,0)
       }
@@ -197,34 +213,55 @@ sjdt_Algorithm <- function(tableaux,range,setorder){
       split[,2*u] <- combined_right
     }
     
-    #Movement section
-    split[split == -setorder] <- 0
-    index <- which(split==0,arr.ind=TRUE)
-    index <- which(index[,1]==1,arr.ind=TRUE)
     
-    print(index)
-    # if the elements in the list that has to be eliminated are exist
-    if(length(index)!=0){
+    #Movement section
+    for(i in 1:ncol(unsplit)){
       
-      index <- index[order(index[,2],decreasing=TRUE),]
+      A[[i]] <-A[[i]][A[[i]] != -setorder]
+      B[[i]] <-B[[i]][B[[i]] != -setorder]
+      C[[i]] <-C[[i]][C[[i]] != -setorder]
+      D[[i]] <-D[[i]][D[[i]] != -setorder]
+      I[[i]] <-I[[i]][C[[i]] != -setorder]
+      J[[i]] <-J[[i]][D[[i]] != -setorder]
+      
+      split[split == -setorder] <- 0
+    }
+    
+    print(split)
+    
+    unsplit[unsplit == -setorder] <- 0
+    
+    # column 이 1일 경우에 예외상황 고려 안함.
+    first_row_unsplit <- unsplit[1,]
+    index <- which(unsplit==0,arr.ind=TRUE)
+    index <- subset(index, index[,1]==1)
+    
+    print(nrow(index))
+    # if the elements in the list that has to be eliminated are exist
+    if(nrow(index)!=0){
+      
+      #sorting에 문제 있을수도 있음
       index_cord <- nrow(index)
       change_cord <- matrix(,nrow=1,ncol=1)
-      
+      change_cord <- index
+
       
       #movement algorithm
+      
       repeat{
         #vertical move
         if(split[change_cord[1,1]+1,2*change_cord[1,2]]<split[change_cord[1,1],2*change_cord[1,2]+1]){
           
-          #A/D column move
+          #A/C column move
           split[change_cord[1,1],2*change_cord[1,2]-1] <- split[change_cord[1,1]+1,2*change_cord[1,2]-1]
           split[change_cord[1,1]+1,2*change_cord[1,2]-1] <- 0
-          #B/C column move
+          #D[[l]]
+          #B/D column move
           split[change_cord[1,1],2*change_cord[1,2]] <- split[change_cord[1,1]+1,2*change_cord[1,2]]
           split[change_cord[1,1]+1,2*change_cord[1,2]] <- 0
           
           # vertical coordinate +1
-          change_cord[1,1] < - change_cord[1,1]+1
+          change_cord[1,2] < - change_cord[1,2]+1
           
         }
         #horizontal move
@@ -233,19 +270,105 @@ sjdt_Algorithm <- function(tableaux,range,setorder){
           # Case : bar_n
           if(split[change_cord[1,1],2*change_cord[1,2]+1]<0){
             
-            #T_n Col B/C insert
-            split[change_cord[1,1],2*change_cord[1,2]] <- split[change_cord[1,1],2*change_cord[1,2]+1]
-            #T_n+1 Col A/D insert
-            split[change_cord[1,1],2*change_cord[1,2]+1] <- 0
+            #T_n Col B/D insert
             
-            B[[change_cord[1,2]]] <- split[change_cord[1,1],2*change_cord[1,2]+1]
-            append[B[[change_cord[1,2]]],B[[change_cord[1,2]]]]
+            
+            B[[change_cord[1,2]]] <- append(B[[change_cord[1,2]]],split[change_cord[1,1],2*change_cord[1,2]+1])
+            #T_n+1 Col A/C insert
+            
+            A[[change_cord[1,2]]] <- A[[change_cord[1,2]]][A[[change_cord[1,2]]] != split[change_cord[1,1],2*change_cord[1,2]+1]]
+
+            
+            #reorder B component
+            sort(B[[change_cord[1,2]]],decreasing = FALSE)
+
+            
+            #Co-admissible column of T_n
+            combined_right_T_n <- append(B[[change_cord[1,2]]],C[[change_cord[1,2]]])
+            abs_combined_right_T_n <- abs(combined_right_T_n)
+            Co_I <- list()
+            Co_J <- list()
+            new_A <- list()
+            new_D <- list()
+            
+            Co_I[[1]] <- matrix(,nrow=1,ncol=1)
+            Co_J[[1]] <- matrix(,nrow=1,ncol=1)
+            new_A[[1]] <- matrix(,nrow=1,ncol=1)
+            new_D[[1]] <- matrix(,nrow=1,ncol=1)
+
+            #re-combine besed on co-admissible column part
             for(k in 1:setorder){
               
-              ##여기서부터 시작 재조합.
+              if(sum(abs_combined_right_T_n==k)==2){
+                Co_I[[1]][1,] <- k
+               
+              }
+              else if(sum(abs_combined_right_T_n==k)==0){
+                Co_J[[1]][1,] <- k
+    
+              }
             }
             
+            sort(Co_I[[1]],decreasing=FALSE)
+            sort(Co_J[[1]],decreasing=FALSE)
+            
 
+
+            new_A[[1]] <- B[[change_cord[1,2]]]
+
+            new_D[[1]] <- C[[change_cord[1,2]]]
+
+
+            
+            # Reconstruct column of T_n
+            for(o in 1:ncol(Co_I[[1]])){
+              
+              if(-Co_I[[1]][1,o] %in% B[[change_cord[1,2]]]){
+                
+                for(h in 1:ncol(Co_J[[1]])){
+                  if(Co_I[[1]][1,o]<Co_J[[1]][1,h]&&Co_J[[1]][1,h]<=setorder){
+                    
+                    new_A[[1]][new_A[[1]] == -Co_I[[1]][1,o]] <- -Co_J[[1]][1,h]
+                    
+                    new_D[[1]][new_D[[1]] == Co_I[[1]][,o]] <- Co_J[[1]][1,h]
+                    
+                    Co_J[[1]] <- Co_J[[1]][Co_J[[1]] != Co_J[[1]][1,h]]
+                    
+                  }
+                }
+              }
+            }
+            sort(new_A[[1]],decreasing = FALSE)
+            sort(new_D[[1]],decreasing = FALSE)
+            
+            
+            
+            new_left_Col_T_n <- append(new_A[[1]],C[[1]])
+            
+            new_left_Col_T_n <- matrix(new_left_Col_T_n, nrow=1, ncol=length(new_left_Col_T_n))
+            
+            new_right_Col_T_n <- append(B[[1]],new_D[[1]])
+            
+            new_right_Col_T_n <- matrix(new_right_Col_T_n, nrow=1, ncol=length(new_right_Col_T_n))
+            
+            
+            print(new_left_Col_T_n)
+            print(new_right_Col_T_n)
+            #insert new value into the Column
+            for(q in 1:ncol(new_left_Col_T_n)){
+              
+              split[q,2*change_cord[1,2]-1] <-  new_left_Col_T_n[1,q]
+              split[q,2*change_cord[1,2]] <-  new_right_Col_T_n[1,q]
+              
+            }
+            
+            change_cord[1,1] < - change_cord[1,1]+1
+
+            print(split)
+            while(TRUE){
+              
+            }
+            
           }
           
           # Case : n
@@ -254,24 +377,28 @@ sjdt_Algorithm <- function(tableaux,range,setorder){
           }
         }
         #exit with vertical or horizontal move
-        if(change_cord[1,1]=="a"||change_cord[1,2]=="b"){
-          break
+        if(change_cord[1,1]>=length_rows[,change_cord[1,2]]||change_cord[1,2]>=length_cols){
+          
+          if(change_cord[1,1]>=length_rows[,change_cord[1,2]]||change_cord[1,2]>=length_cols){
+            #-setorder값 넣기
+          }
+          else{
+            break
+          }
         }
       }
       
       
       
     }
-    
+    print(split)
     sjdt_Algorithm(Shape,Range,setorder-1)
     
     
     
-    print(split)
     return(split)
   }
   
 }
 
-a <- sjdt_Algorithm(Shape,Range,4)
-
+a <- sjdt_Algorithm(Shape,Range,3)
