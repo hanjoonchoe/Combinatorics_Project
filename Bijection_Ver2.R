@@ -37,7 +37,11 @@ vertical_move <- function(tableaux,rows,columns){
 
 #Make splited column
 Splited_Form <- function(tableaux,setorder,coordinate){
-  
+  print("Start")
+  for(c in 1:nrow(coordinate)){
+    
+    tableaux[coordinate[c,1],coordinate[c,2]] <-0
+  }
   abs_tableaux <- abs(tableaux)
   
   #Extract each properties
@@ -56,10 +60,10 @@ Splited_Form <- function(tableaux,setorder,coordinate){
     #empty-slot
     J[[l]] <- matrix(,nrow=1,ncol=1)
     
-    A[[l]] <- matrix(,nrow=1,ncol=ncol(unsplit))
-    B[[l]] <- matrix(,nrow=1,ncol=ncol(unsplit))
-    C[[l]] <- matrix(,nrow=1,ncol=ncol(unsplit))
-    D[[l]] <- matrix(,nrow=1,ncol=ncol(unsplit))
+    A[[l]] <- matrix(,nrow=1,ncol=ncol(tableaux))
+    B[[l]] <- matrix(,nrow=1,ncol=ncol(tableaux))
+    C[[l]] <- matrix(,nrow=1,ncol=ncol(tableaux))
+    D[[l]] <- matrix(,nrow=1,ncol=ncol(tableaux))
     
     for(m in 1:setorder-1){
       if(sum(abs_tableaux[,l]==m)==2){
@@ -71,7 +75,7 @@ Splited_Form <- function(tableaux,setorder,coordinate){
     }
   }
   
-  for(n in 1:ncol(unsplit)){
+  for(n in 1:ncol(tableaux)){
     
     #Extract A and D
     A[[n]] <- subset(tableaux[,n],tableaux[,n]<0)
@@ -98,6 +102,35 @@ Splited_Form <- function(tableaux,setorder,coordinate){
     sort(B[[n]],decreasing = FALSE)
     sort(C[[n]],decreasing = FALSE)
   }
+  
+  split <- matrix(,nrow=nrow(tableaux),ncol=2*ncol(tableaux))
+  for(u in 1:ncol(tableaux)){
+    
+    combined_left <- append(A[[u]],C[[u]])
+    combined_right <- append(B[[u]],D[[u]])
+ 
+    if(coordinate[,2]==u){
+      
+      combined_left <- append(0,combined_left)
+      combined_right <- append(0,combined_right)
+      
+    }
+    
+    #무한루프
+    while(length(combined_left)<nrow(tableaux)){
+
+      combined_left <- append(combined_left,0)
+    }
+    while(length(combined_right)<nrow(tableaux)){
+      
+      combined_right <- append(combined_right,0)
+    }
+
+    split[,2*u-1] <- combined_left
+    split[,2*u] <- combined_right
+  }
+
+  return(split)
   
   
 }
@@ -153,6 +186,8 @@ sjdt_Algorithm <- function(tableaux,range,setorder){
      king_part <- unsplit
      king_part[uni_unsplit<3] <- 0
      
+     print(king_part)
+     
      
      ###############################################################################################
      
@@ -161,11 +196,12 @@ sjdt_Algorithm <- function(tableaux,range,setorder){
      length_rows <- Determine_Shape(unsplit,setorder)
      length_cols <- ncol(length_rows)
      
-     print(coordinate)
-     print(length_rows)
-     print(coordinate)
-     print(length_cols)
-     
+     split<-Splited_Form(deconcini_part,setorder,coordinate)
+     print("1")
+     print(split)
+     while(TRUE){
+       
+     }
    }
    
    else if(reducesizecount!=1){
