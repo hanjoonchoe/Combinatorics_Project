@@ -14,10 +14,10 @@ D2K_Gen(D_tab,Range)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{D2K_Bijection}{
-  Bijecting DeConcini tableau to King tableau
+  Bijection from DeConcini tableau to King tableau
 }
   \item{D2K_Gen}{
-  Bijecting  a couple of DeConcini tableaux to King tableaux
+  Bijection DeConcini tableaux to King tableaux
 }
 }
 \details{
@@ -48,7 +48,7 @@ D2K_Gen(D_tab,Range)
 \examples{
 
 1. Shape <- c(3,2,1)
-2. Range <- 3
+2. Range <- 3 (i.e. {-3,-2,-1,1,2,3})
 3. D_tab <- DeConcini_Generator(Shape,Range)
 4. D2K_tab <- D2K_Bijection(D_tab[[1]],Range) or D2K_Gen(D_tab,Range)
 % Add one or more standard keywords, see file 'KEYWORDS' in the

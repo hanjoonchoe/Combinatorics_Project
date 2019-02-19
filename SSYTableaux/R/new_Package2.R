@@ -1,4 +1,4 @@
-
+#Copyright 2018, HANJOON CHOE, All rights reserved.
 King_Generator <- function(my.colSize,Range){
 
   if(which(rownames(installed.packages())=="gtools",arr.ind=TRUE)!=0){

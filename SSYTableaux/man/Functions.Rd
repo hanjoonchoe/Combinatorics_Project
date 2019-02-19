@@ -17,12 +17,12 @@ D_tab <- DeConcini_Generator(Shape,Range)
 \arguments{
   \item{Shape}{
 
-  Determine the shape of tableaux
+  Determine the shape of a tableau
 
 }
   \item{Range}{
 
-  Determine a range of set for filling the tableaux
+  Determine a range of a set filling the tableau
 
 }
 }
@@ -53,8 +53,8 @@ D_tab <- DeConcini_Generator(Shape,Range)
 }
 \examples{
 
-1. Shape < c(3,2,2)
-2. Range <- 3
+1. Shape <- c(3,2,2)
+2. Range <- 3 (i.e. {-3,-2,-1,1,2,3})
 3. K_tab <- King_Generator(Shape,Range) or DeConcini_Generator(Shape,Range)
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
