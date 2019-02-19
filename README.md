@@ -14,10 +14,10 @@
     You need to choose a proper range with respect to the shape carefully. Otherwise, it will occur error!!
 
 ### 4. D_tab <- DeConcini_Generator(Shape,Range) 
-    Generating DeConcini Tableaux given by the shape and range
+    Generating DeConcini tableaux given by the shape and range
 
 ### 5. K_tab <- King_Generator(Shape,Range) 
-    Generating King Tableaux given by the shape and range
+    Generating King tableaux given by the shape and range
 
 ### 6. D2K_tab <- D2K_Gen(D_tab,Range)
     Bijection from DeConcini to King tableaux
