@@ -1,5 +1,7 @@
 # Tutorial
 
+### OPEN SSYTableaux.Rproj
+
 ### 1. Run new_Package2.R
 
 ### 2. Shape <- c(3,3,1) 
