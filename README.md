@@ -29,4 +29,4 @@
     
 ### 7. KN_tab <- DtoKN_Gen(D_tab,Range)
     Bijection from DeConcini to KN(Kashiwara-Nakashima) Tableaux
-    When using this function, you should run Untitled1
+    When using this function, you should run Untitled1 first
