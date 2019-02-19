@@ -3,27 +3,27 @@
 ### 1. Run new_Package2.R
 
 ### 2. Shape <- c(3,3,1) 
-                  # * * *
-                  # * *
-                  # * *
+     * * *
+     * *
+     * *
+     
     This determine the shape of tableaux
 
-Range <- 3  # Must be larger than 2
+### 3. Range <- 3  
+    Must be larger than 2
+    
+    This determine the elements filling tableaux
 
-  #This determine the elements filling tableaux
+### 4. D_tab <- DeConcini_Generator(Shape,Range) 
+    Generating DeConcini Tableaux given by Shape and Range
 
-D_tab <- DeConcini_Generator(Shape,Range) 
+### 5. K_tab <- King_Generator(Shape,Range) 
+    Generating King Tableaux given by Shape and Range
 
-  #Generating DeConcini Tableaux given by Shape and Range
+### 6. D2K_tab <- D2K_Gen(D_tab,Range)
+    Bijection from DeConcini to King tableaux
 
-K_tab <- King_Generator(Shape,Range) 
-
-  #Generating King Tableaux given by Shape and Range
-
-D2K_tab <- D2K_Gen(D_tab,Range)# Bijection from DeConcini to King tableaux
-
- #When converting one tableau, you can use following function
  
-D2K_tab <- D2K_Bijection(D_tab[[1]],Range) 
-
- #where D_tab[[1]] indicates single Deconcini tableau
+### 7. D2K_tab <- D2K_Bijection(D_tab[[1]],Range) 
+    When converting one tableau, you can use this function
+    where D_tab[[1]] indicates single Deconcini tableau
