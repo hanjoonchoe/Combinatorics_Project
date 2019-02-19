@@ -7,10 +7,10 @@
      * *
      * *
      
-    This determine the shape of tableaux
+    This determines the shape of tableaux
 
 ### 3. Range <- 3 
-    This determine the elements filling tableaux
+    This determines the elements filling tableaux
     You need to choose a proper range with respect to the shape carefully. otherwise, it will occur error!!
 
 ### 4. D_tab <- DeConcini_Generator(Shape,Range) 
