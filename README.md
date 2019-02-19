@@ -1,11 +1,11 @@
 # Tutorial
 
-### Run new_Package2.R
+### 1. Run new_Package2.R
 
-Shape <- c(3,3,1) # * * *
+### 2. Shape <- c(3,3,1) # * * *
                   # * *
                   # * *
-  #This determine the shape of tableaux
+  ##### This determine the shape of tableaux
 
 Range <- 3  # Must be larger than 2
 
