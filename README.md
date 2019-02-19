@@ -2,7 +2,8 @@
 
 ### 1. Run new_Package2.R
 
-### 2. Shape <- c(3,3,1) # * * *
+### 2. Shape <- c(3,3,1) 
+                  # * * *
                   # * *
                   # * *
   ##### This determine the shape of tableaux
