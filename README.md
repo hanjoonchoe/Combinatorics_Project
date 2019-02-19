@@ -6,7 +6,7 @@
                   # * * *
                   # * *
                   # * *
-  ##### This determine the shape of tableaux
+    This determine the shape of tableaux
 
 Range <- 3  # Must be larger than 2
 
