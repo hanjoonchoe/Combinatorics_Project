@@ -21,8 +21,8 @@ K_tab <- King_Generator(Shape,Range)
 
 D2K_tab <- D2K_Gen(D_tab,Range)# Bijection from DeConcini to King tableaux
 
-  # When converting one tableau, you can use following function
-  
+ # When converting one tableau, you can use following function
+ 
 D2K_tab <- D2K_Bijection(D_tab[[1]],Range) 
 
-  # where D_tab[[1]] indicate single Deconcini tableau
+ # where D_tab[[1]] indicates single Deconcini tableau
