@@ -29,6 +29,6 @@
     When converting one tableau, you can use this function
     where D_tab[[1]] indicates single Deconcini tableau
     
-### 7. KN_tab <- DtoKN_Gen(D_tab,Range)
+### 8. KN_tab <- DtoKN_Gen(D_tab,Range)
     Bijection from DeConcini to KN(Kashiwara-Nakashima) Tableaux
     When using this function, you should run Untitled1 first
