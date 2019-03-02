@@ -11,7 +11,7 @@
      
     This determines the shape of tableaux
 
-### 3. Range <- 3 
+### 3. Range <- 3 {-3,-2,-1,1,2,3}
     This determines elements filling tableau
     You need to choose a proper range with respect to the shape carefully. Otherwise, it will occur error!!
 
@@ -27,8 +27,8 @@
  
 ### 7. D2K_tab <- D2K_Bijection(D_tab[[1]],Range) 
     When converting one tableau, you can use this function
-    where D_tab[[1]] indicates single Deconcini tableau
+    where D_tab[[1]] indicates single De Concini tableau
     
 ### 8. KN_tab <- DtoKN_Gen(D_tab,Range)
-    Bijection from DeConcini to KN(Kashiwara-Nakashima) Tableaux
+    Bijection from DeConcini to KN(Kashiwara-Nakashima) tableaux
     When using this function, you should run Untitled1 first
