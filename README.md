@@ -11,8 +11,8 @@
      
     This determines the shape of tableaux
 
-### 3. Range <- 3 {-3,-2,-1,1,2,3}
-    This determines elements filling tableau
+### 3. Range <- 3 
+    This determines elements filling tableau 3 is {-3,-2,-1,1,2,3}
     You need to choose a proper range with respect to the shape carefully. Otherwise, it will occur error!!
 
 ### 4. D_tab <- DeConcini_Generator(Shape,Range) 
